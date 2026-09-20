@@ -1,23 +1,3 @@
-select * from customer_registered
-select * from customer_transaction
-
-select    STR_TO_DATE(Purchase_Date, '%m/%d/%Y') AS Date, Sum(GMV) AS Total_GMV, Count(Transaction_ID) AS Total_Transaction, Count(DISTINCT CustomerID) AS Total_Customer
-from customer_transaction
-group by STR_TO_DATE(Purchase_Date, '%m/%d/%Y');
-
-
-SELECT
-    SUM(t.GMV) AS Total_GMV,
-    COUNT(t.Transaction_ID) AS Total_Transaction,
-    COUNT(DISTINCT t.CustomerID) AS Total_Customer,
-    YEAR(STR_TO_DATE(r.created_date, '%m/%d/%Y')) AS Year
-FROM customer_transaction t
-JOIN customer_registered r ON t.CustomerID = r.ID
-WHERE t.CustomerID <> 0
-GROUP BY YEAR(STR_TO_DATE(r.created_date, '%m/%d/%Y'));
-
-
-
 with RFM as(
     select t.CustomerID,
             round(datediff(str_to_date('2022-09-01', '%Y-%m-%d'), min(str_to_date(r.created_date, '%m/%d/%Y'))) / 365.0, 2) as Contract_age, #Độ tuổi hợp đồng
